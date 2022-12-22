@@ -162,3 +162,34 @@ def cycle(f1, f2, f3):
                 return cycle(f2,f3,f1)(n-1)(f1(x))
         return res
     return func
+
+def match_k(k):
+    """ Return a function that checks if digits k apart match
+
+    >>> match_k(2)(1010)
+    True
+    >>> match_k(2)(2010)
+    False
+    >>> match_k(1)(1010)
+    False
+    >>> match_k(1)(1)
+    True
+    >>> match_k(1)(2111111111111111)
+    False
+    >>> match_k(3)(123123)
+    True
+    >>> match_k(2)(123123)
+    False
+    """
+
+    def check(n):
+        while 10**(k) < n:
+            last, away = n % 10, (n//(10**k))%10
+            if last != away:
+                return False
+            n = n // 10
+        return True
+    return check
+
+
+
