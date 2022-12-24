@@ -167,6 +167,9 @@ def apply_twice(func):
 
 
 def div_by_primes_under(n):
+    """return a function(k),
+    if k is divided by n prime, return True
+    else return False"""
     """
     >>> div_by_primes_under(10)(11)
     False
@@ -177,10 +180,12 @@ def div_by_primes_under(n):
     >>> div_by_primes_under(5)(1)
     False
     """
-    checker = lambda x: False
+    checker = lambda x: False # n < 2 return False
     i = 2
     while i <= n:
+        # If i is not divided by the previous prime number, we can update the checker function
         if not checker(i):
+            # Either x is divided by i or by the previous prime number, it returns True
             checker = (lambda f,i : lambda x: x % i == 0 or f(x))(checker,i)
         i = i + 1
     return checker
