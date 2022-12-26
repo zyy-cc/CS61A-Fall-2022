@@ -1,6 +1,6 @@
 HW_SOURCE_FILE = __file__
 
-
+# python -m doctest -v xxx.py
 def num_eights(pos):
     """Returns the number of times 8 appears as a digit of pos.
 
@@ -25,6 +25,12 @@ def num_eights(pos):
     True
     """
     "*** YOUR CODE HERE ***"
+    if pos == 0:
+        return 0
+    elif pos % 10 == 8:
+        return 1 + num_eights(pos // 10)
+    else:
+        return num_eights(pos // 10)
 
 
 def pingpong(n):
@@ -61,6 +67,40 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+
+    def check(x):
+        if x % 8 == 0 or num_eights(x) > 0:
+            return True
+        else:
+            return False
+
+    def direction(i, increase):
+        if check(i):
+            return not increase
+        else:
+            return increase
+
+        # i, pp_val = 1, 0
+        # increase = True
+        # while i <= n:
+        #     if increase:
+        #         pp_val += 1
+        #     else:
+        #         pp_val -= 1
+        #     increase = direction(i,increase)
+        #     i += 1
+        # return pp_val
+    def helper(i, increase, result):
+        if i == n:
+            return result
+        else:
+            if direction(i, increase):
+                return helper(i + 1, direction(i, increase), result + 1)
+            else:
+                return helper(i + 1, direction(i, increase), result - 1)
+
+    return helper(1, True, 1)
+
 
 
 def next_larger_coin(coin):
@@ -118,13 +158,25 @@ def count_coins(change):
     """
     "*** YOUR CODE HERE ***"
 
+    def helper(change, coin):
+        if change == 0:
+            return 1
+        elif change < 0:
+            return 0
+        elif coin is None:
+            return 0
+        else:
+            return helper(change - coin, coin) + helper(change, next_smaller_coin(coin))
+
+    return helper(change, 25)
+
 
 anonymous = False  # Change to True if you would like to remain anonymous on the final leaderboard.
 
 
 def beaver(f):
     "*** YOUR CODE HERE ***"
-    __________________
+    (lambda g: g(g(g(g(g(g(g(f))))))))(lambda f: lambda: f() or f() or f())()
 
 
 def beaver_syntax_check():
