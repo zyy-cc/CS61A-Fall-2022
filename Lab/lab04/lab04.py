@@ -20,6 +20,9 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        return term(1)
+    return term(n)+summation(n-1,term)
 
 
 def pascal(row, column):
@@ -35,6 +38,15 @@ def pascal(row, column):
     6
     """
     "*** YOUR CODE HERE ***"
+    if column > row:
+        return 0
+    # The first and last is 1
+    elif column == 0 or column == row:
+        return 1
+    else:
+        return pascal(row-1,column) + pascal(row-1,column-1)
+
+
 
 
 def paths(m, n):
@@ -51,6 +63,11 @@ def paths(m, n):
     1
     """
     "*** YOUR CODE HERE ***"
+    if m == 1 or n == 1:
+        return 1
+    else:
+        return paths(m-1,n) + paths(m,n-1)
+
 
 
 def couple(s, t):
@@ -67,6 +84,12 @@ def couple(s, t):
     """
     assert len(s) == len(t)
     "*** YOUR CODE HERE ***"
+    # result = []
+    # for i in range(len(s)):
+    #     result.append([s[i],t[i]])
+    # return result
+    return [[s[i],t[i]]for i in range(len(s))]
+
 
 
 def double_eights(n):
@@ -91,6 +114,21 @@ def double_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    prev_eight = False
+    def helper(x,prev_eight):
+        if x <= 0:
+            return False
+        all_but_last, last = x // 10, x % 10
+        if last == 8 and prev_eight:
+            return True
+        elif last == 8:
+            prev_eight = True
+        else:
+            prev_eight = False
+        return helper(all_but_last,prev_eight)
+    return helper(n,prev_eight)
+
+
 
 
 def coords(fn, seq, lower, upper):
@@ -101,7 +139,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[element,fn(element)]for element in seq if fn(element) <= upper and fn(element) >= lower]
 
 
 def riffle(deck):
@@ -114,4 +152,9 @@ def riffle(deck):
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return [deck[int(i/2)] if i % 2 == 0 else deck[int(len(deck)/2 + (i-1)/2)] for i in range(len(deck))]
+
+#Two types of list comprehension
+#[i for i in range(k) if condition]
+#[result if condition else result for xxx]
+
