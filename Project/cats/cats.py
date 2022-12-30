@@ -31,6 +31,15 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    result = []
+    for p in paragraphs:
+        if select(p):
+            result.append(p)
+    if k >= len(result):
+        return ''
+    else:
+        return result[k]
+
     # END PROBLEM 1
 
 
@@ -50,6 +59,14 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def select(paragraph):
+        sequence = split(remove_punctuation(paragraph))
+        for element in sequence:
+            lower_ele = lower(element)
+            if lower_ele in topic:
+                return True
+        return False
+    return select
     # END PROBLEM 2
 
 
@@ -80,6 +97,18 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    correct = 0
+    if len(typed_words) == 0 and len(source_words) == 0:
+        return 100.0
+    elif len(typed_words) == 0:
+        return 0.0
+    elif len(source_words) == 0:
+        return 0.0
+    else:
+        for i in range(min(len(typed_words),len(source_words))):
+            if typed_words[i] == source_words[i]:
+                correct += 1
+        return correct/len(typed_words) * 100
     # END PROBLEM 3
 
 
@@ -98,6 +127,9 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    if len(typed) == 0:
+        return 0.0
+    return (len(typed)/5)/(elapsed/60)
     # END PROBLEM 4
 
 
