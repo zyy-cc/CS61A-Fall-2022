@@ -434,7 +434,7 @@ def match_string(match):
     return f"match({match['words']}, {match['times']})"
 
 
-enable_multiplayer = False  # Change to True when you're ready to race.
+enable_multiplayer = True  # Change to True when you're ready to race.
 
 
 ##########################
