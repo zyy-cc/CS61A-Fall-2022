@@ -101,7 +101,8 @@ def print_sum(t, so_far):
         for b in branches(t):
             print_sum(b, so_far)
 
-def count_paths(t,total):
+
+def count_paths(t, total):
     """Return the number of paths from the root to any node in t
     for which the labels along the path sum to total.
 
@@ -130,4 +131,26 @@ def count_paths(t,total):
         found = 1
     else:
         found = 0
-    return found + sum([count_paths(b,total-label(t))for b in branches(t)])
+    return found + sum([count_paths(b, total - label(t)) for b in branches(t)])
+
+
+def partition_tree(n, m):
+    """Return a partition tree of n using parts of up to m."""
+    if n == 0:
+        return tree(True)
+    elif n < 0 or m == 0:
+        return tree(False)
+    else:
+        left = partition_tree(n - m, m)
+        right = partition_tree(n, m - 1)
+        return tree(m, [left, right])
+
+def print_parts(tree,partition = []):
+    if is_leaf(tree):
+        if label(tree):
+            print('+'.join(partition))
+    else:
+        left, right = branches(tree)
+        m = str(label(tree))
+        print_parts(left, partition+[m])
+        print_parts(right,partition)
