@@ -166,6 +166,9 @@ class AICard(Card):
         """
         "*** YOUR CODE HERE ***"
         implemented = False
+        for _ in range(2):
+            player.draw()
+        implemented = True
         # You should add your implementation above this.
         if implemented:
             print(f"{self.name} allows me to draw two cards!")
