@@ -27,16 +27,18 @@ class Mint:
     >>> dime.worth()     # 20 cents + (155 - 50 years)
     125
     """
-    present_year = 2022
+    present_year: int = 2022
 
     def __init__(self):
         self.update()
 
     def create(self, coin):
         "*** YOUR CODE HERE ***"
+        return coin(self.year)
 
     def update(self):
         "*** YOUR CODE HERE ***"
+        self.year = Mint.present_year
 
 
 class Coin:
@@ -47,6 +49,11 @@ class Coin:
 
     def worth(self):
         "*** YOUR CODE HERE ***"
+        pass_year = Mint.present_year - self.year
+        if pass_year >= 50:
+            return self.cents + pass_year - 50
+        else:
+            return self.cents
 
 
 class Nickel(Coin):
@@ -74,6 +81,11 @@ def store_digits(n):
     >>> link1 = Link(3, Link(Link(4), Link(5, Link(6))))
     """
     "*** YOUR CODE HERE ***"
+    result = Link.empty
+    while n:
+        n, last = n // 10, n % 10
+        result = Link(last, result)
+    return result
 
 
 def deep_map_mut(func, lnk):
@@ -94,6 +106,13 @@ def deep_map_mut(func, lnk):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
+    if lnk is Link.empty:
+        return lnk
+    elif isinstance(lnk.first, Link):
+        deep_map_mut(func, lnk.first)
+    else:
+        lnk.first = func(lnk.first)
+    deep_map_mut(func, lnk.rest)
 
 
 def two_list(vals, counts):
@@ -116,6 +135,18 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+    num = []
+    for i in range(len(vals)):
+        for _ in range(counts[i]):
+            num.append(vals[i])
+
+    def build_link(num):
+        if not num:
+            return Link.empty
+        else:
+            return Link(num[0], build_link(num[1:]))
+
+    return build_link(num)
 
 
 class VirFib():
@@ -253,4 +284,5 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
