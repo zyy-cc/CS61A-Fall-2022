@@ -8,6 +8,30 @@ def convert_link(link):
     []
     """
     "*** YOUR CODE HERE ***"
+    # recursive
+    if link is Link.empty:
+        return []
+    else:
+        return [link.first] + convert_link(link.rest)
+
+
+def label_squarer(t):
+    """Mutates a Tree t by squaring all its elements.
+
+    >>> t = Tree(1, [Tree(3, [Tree(5)]), Tree(7)])
+    >>> label_squarer(t)
+    >>> t
+    Tree(1, [Tree(9, [Tree(25)]), Tree(49)])
+    """
+    "*** YOUR CODE HERE ***"
+    if t is not Link.empty:
+        t.label = square(t.label)
+        for b in t.branches:
+            label_squarer(b)
+
+
+def square(x):
+    return x * x
 
 
 def duplicate_link(link, val):
@@ -46,6 +70,11 @@ def cumulative_mul(t):
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
     "*** YOUR CODE HERE ***"
+    res = 1
+    for b in t.branches:
+        cumulative_mul(b)
+        res *= b.label
+    t.label = res * t.label
 
 
 def every_other(s):
@@ -66,6 +95,14 @@ def every_other(s):
     Link(4)
     """
     "*** YOUR CODE HERE ***"
+    def helper(t, index):
+        if t is Link.empty:
+            return
+        helper(t.rest, index + 1)
+        if index % 2 == 0 and t.rest is not Link.empty:
+            t.rest = t.rest.rest
+
+    helper(s, 0)
 
 
 def prune_small(t, n):
@@ -85,11 +122,11 @@ def prune_small(t, n):
     >>> t3
     Tree(6, [Tree(1), Tree(3, [Tree(1), Tree(2)])])
     """
-    while ___________________________:
-        largest = max(_______________, key=____________________)
-        _________________________
-    for __ in _____________:
-        ___________________
+    while len(t.branches) > n:
+        largest = max(t.branches, key=lambda x: x.label)
+        t.branches.remove(largest)
+    for b in t.branches:
+        prune_small(b,n)
 
 
 class Link:
@@ -167,4 +204,5 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()

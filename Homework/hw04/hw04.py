@@ -423,3 +423,10 @@ def copy_tree(t):
     5
     """
     return tree(label(t), [copy_tree(b) for b in branches(t)])
+
+
+from mpl_toolkits import mplot3d  # ( only for older matplotlib versions )
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+
