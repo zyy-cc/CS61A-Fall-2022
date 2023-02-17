@@ -8,6 +8,7 @@ def insert_into_all(item, nested_list):
     [[0], [0, 1, 2], [0, 3]]
     """
     "*** YOUR CODE HERE ***"
+    return [[item] + ele for ele in nested_list]
 
 
 def subseqs(s):
@@ -20,11 +21,11 @@ def subseqs(s):
     >>> subseqs([])
     [[]]
     """
-    if ________________:
-        ________________
+    if len(s) <= 1:
+        return [[], s] if len(s) == 1 else [[]]
     else:
-        ________________
-        ________________
+        tmp = subseqs(s[1:])
+        return insert_into_all(s[0], tmp) + tmp
 
 
 def non_decrease_subseqs(s):
@@ -41,16 +42,18 @@ def non_decrease_subseqs(s):
     >>> sorted(seqs2)
     [[], [1], [1], [1, 1], [1, 1, 2], [1, 2], [1, 2], [2]]
     """
+
     def subseq_helper(s, prev):
         if not s:
-            return ____________________
+            return [[]]
         elif s[0] < prev:
-            return ____________________
+            return subseq_helper(s[1:], prev)
         else:
-            a = ______________________
-            b = ______________________
-            return insert_into_all(________, ______________) + ________________
-    return subseq_helper(____, ____)
+            a = subseq_helper(s[1:], prev)  # not include S0
+            b = subseq_helper(s[1:], s[0])  # all element should larger than s[0]
+            return insert_into_all(s[0], b) + a
+
+    return subseq_helper(s, 0)
 
 
 def num_trees(n):
@@ -74,6 +77,14 @@ def num_trees(n):
 
     """
     "*** YOUR CODE HERE ***"
+    # base case
+    if n == 1 or n == 2:
+        return 1
+    else:
+        res = 0
+        for i in range(1, n):
+            res += num_trees(i) * num_trees(n - i)
+        return res
 
 
 def partition_gen(n):
@@ -86,14 +97,22 @@ def partition_gen(n):
     [2, 1, 1]
     [1, 1, 1, 1]
     """
-    def yield_helper(j, k):
-        if j == 0:
-            ____________________________________________
-        elif ____________________________________________:
-            for small_part in ________________________________:
-                yield ____________________________________________
-            yield ________________________________________
-    yield from yield_helper(n, n)
+    # if n == 0:
+    #     return []
+    # res = [[n]]
+    # for j in range(1,n):
+    #     for b in partition_gen(n-j):
+    #         if j <= max(b):
+    #             res.append(b + [j])
+    # return res
+
+    if n == 0:
+        return
+    yield [n]
+    for j in range(1, n):
+        for b in partition_gen(n - j):
+            if j <= b[0]:
+                yield b + [j]
 
 
 class VendingMachine:
@@ -134,6 +153,36 @@ class VendingMachine:
     'Here is your soda.'
     """
     "*** YOUR CODE HERE ***"
+    stock = 0
+    balance = 0
+
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+    def vend(self):
+        if self.stock == 0:
+            return 'Nothing left to vend. Please restock.'
+        elif self.balance < self.price:
+            return f'Please update your balance with ${self.price - self.balance} more funds.'
+        else:
+            self.stock -= 1
+            left = self.balance - self.price
+            self.balance = 0
+            if left == 0:
+                return f'Here is your {self.name}.'
+            else:
+                return f'Here is your {self.name} and ${left} change.'
+
+    def restock(self, number):
+        self.stock += number
+        return f'Current {self.name} stock: {self.stock}'
+
+    def add_funds(self, money):
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock. Here is your ${money}.'
+        self.balance += money
+        return f'Current balance: ${self.balance}'
 
 
 def trade(first, second):
@@ -173,9 +222,9 @@ def trade(first, second):
     """
     m, n = 1, 1
 
-    equal_prefix = lambda: ______________________
-    while _______________________________:
-        if __________________:
+    equal_prefix = lambda: sum(first[:m]) == sum(second[:n])
+    while m <= len(first) and n <= len(second) and not equal_prefix():
+        if sum(first[:m]) < sum(second[:n]):
             m += 1
         else:
             n += 1
@@ -213,11 +262,11 @@ def shuffle(cards):
     ['AH', 'AD', 'AS', 'AC', '2H', '2D', '2S', '2C', '3H', '3D', '3S', '3C']
     """
     assert len(cards) % 2 == 0, 'len(cards) must be even'
-    half = _______________
+    half = len(cards)//2
     shuffled = []
-    for i in _____________:
-        _________________
-        _________________
+    for i in range(half):
+        shuffled.append(cards[i])
+        shuffled.append(cards[half + i])
     return shuffled
 
 
@@ -242,6 +291,14 @@ def insert(link, value, index):
     IndexError: Out of bounds!
     """
     "*** YOUR CODE HERE ***"
+    if index == 0:
+        link.rest = Link(link.first, link.rest)
+        link.first = value
+        return
+    elif link.rest is not Link.empty:
+        insert(link.rest, value, index - 1)
+    else:
+        raise IndexError('Out of bounds!')
 
 
 def deep_len(lnk):
@@ -258,12 +315,12 @@ def deep_len(lnk):
     >>> deep_len(levels)
     5
     """
-    if ______________:
+    if lnk is Link.empty:
         return 0
-    elif ______________:
+    elif isinstance(lnk, int):
         return 1
     else:
-        return _________________________
+        return deep_len(lnk.first) + deep_len(lnk.rest)
 
 
 def make_to_string(front, mid, back, empty_repr):
@@ -281,11 +338,13 @@ def make_to_string(front, mid, back, empty_repr):
     >>> jerrys_to_string(Link.empty)
     '()'
     """
+
     def printer(lnk):
-        if ______________:
-            return _________________________
+        if lnk is Link.empty:
+            return empty_repr
         else:
-            return _________________________
+            return front + str(lnk.first) + mid + printer(lnk.rest) + back
+
     return printer
 
 
@@ -433,4 +492,5 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
