@@ -262,7 +262,7 @@ def shuffle(cards):
     ['AH', 'AD', 'AS', 'AC', '2H', '2D', '2S', '2C', '3H', '3D', '3S', '3C']
     """
     assert len(cards) % 2 == 0, 'len(cards) must be even'
-    half = len(cards)//2
+    half = len(cards) // 2
     shuffled = []
     for i in range(half):
         shuffled.append(cards[i])
@@ -399,6 +399,15 @@ def long_paths(t, n):
     [[0, 11, 12, 13, 14]]
     """
     "*** YOUR CODE HERE ***"
+    res = []
+    if t.is_leaf() and n <= 0:
+        return [[t.label]]
+    elif t.is_leaf() and n > 0:
+        return []
+    else:
+        for b in t.branches:
+            res.extend([[t.label] + l for l in long_paths(b, n - 1)])
+        return res
 
 
 def reverse_other(t):
@@ -415,6 +424,19 @@ def reverse_other(t):
     Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
     """
     "*** YOUR CODE HERE ***"
+    def helper(t, d):
+        if t.is_leaf():
+            return
+        if d % 2 == 0:
+            labels = [b.label for b in t.branches][::-1]
+            for i in range(len(labels)):
+                t.branches[i].label = labels[i]
+        for b in t.branches:
+            helper(b, d + 1)
+    helper(t, 0)
+
+
+
 
 
 class Link:

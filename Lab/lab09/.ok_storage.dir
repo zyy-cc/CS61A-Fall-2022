@@ -6,3 +6,5 @@
 'insert-correct', (2560, 70)
 'deep_len-correct', (3072, 70)
 'make_to_string-correct', (3584, 70)
+'long_paths-correct', (4096, 70)
+'reverse_other-correct', (4608, 70)

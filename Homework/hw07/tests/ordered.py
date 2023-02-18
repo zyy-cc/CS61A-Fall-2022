@@ -1,13 +1,13 @@
 test = {
-  'name': 'cadr-caddr',
+  'name': 'ordered?',
   'points': 1,
   'suites': [
     {
       'cases': [
         {
           'code': r"""
-          scm> (cddr '(1 2 3 4))
-          (3 4)
+          scm> (ordered? '(1 2 3 4 5))  ; #t or #f
+          #t
           """,
           'hidden': False,
           'locked': False,
@@ -15,8 +15,8 @@ test = {
         },
         {
           'code': r"""
-          scm> (cadr '(1 2 3 4))
-          2
+          scm> (ordered? '(1 5 2 4 3))  ; #t or #f
+          #f
           """,
           'hidden': False,
           'locked': False,
@@ -24,8 +24,17 @@ test = {
         },
         {
           'code': r"""
-          scm> (caddr '(1 2 3 4))
-          3
+          scm> (ordered? '(2 2))  ; #t or #f
+          #t
+          """,
+          'hidden': False,
+          'locked': False,
+          'multiline': False
+        },
+        {
+          'code': r"""
+          scm> (ordered? '(1 2 2 4 3))  ; #t or #f
+          #f
           """,
           'hidden': False,
           'locked': False,

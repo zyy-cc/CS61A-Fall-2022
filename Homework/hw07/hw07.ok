@@ -1,6 +1,6 @@
 {
     "name": "Homework 7",
-    "endpoint": "cal/cs61a/fa22/hw07",
+    "endpoint": "cal/cs61a/fa21/hw07",
     "src": [
         "hw07.scm"
     ],
@@ -11,7 +11,7 @@
     "default_tests": [
         "pow",
         "cadr-caddr",
-        "ascending"
+        "ordered"
     ],
     "protocols": [
         "restore",
